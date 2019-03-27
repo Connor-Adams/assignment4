@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
+using System.Transactions;
 using System.Xml;
 
 namespace A4ConnorAdams
@@ -11,12 +12,32 @@ namespace A4ConnorAdams
     {
         private static string[,] _guestList = new string[6,4];
 
-        private static bool verboose = true;
+        private static bool verbose = true;
 
-        //TODO
-        static void SearchBySeat()
-        {
-            Console.WriteLine("Search by table");
+     static void SearchBySeat()
+     {
+         int table, seat;
+            try
+            {
+                Console.WriteLine("Enter Table number");
+                table = int.Parse(Console.ReadLine());
+                if (table > 6 || table <= 0)
+                {
+                    throw new ArgumentOutOfRangeException("Table Array",
+                        "Table out of bounds; Value from 1-6 expected");
+                }
+            }
+            catch (Exception e)
+            {
+                if (verbose)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+
+                Console.WriteLine("Response out of bounds");
+                //goto
+            }
+            
         }
 
         static void SearchByName()
@@ -45,7 +66,7 @@ namespace A4ConnorAdams
             }
             catch (Exception e)
             {
-                if (verboose)
+                if (verbose)
                 {
                     Console.WriteLine(e.ToString());
                 }
@@ -109,11 +130,7 @@ namespace A4ConnorAdams
             }
         }
 
-        static void ValidatePosition(int table, int seat)
-        {
-            
-        }
-
+       
         static void AddGuest()
         {
             int table, seat;
@@ -135,7 +152,7 @@ namespace A4ConnorAdams
                 }
                 catch (Exception e)
                 {
-                    if (verboose)
+                    if (verbose)
                     {
                         Console.WriteLine(e.ToString());
                     }
@@ -159,7 +176,7 @@ namespace A4ConnorAdams
                 }
                 catch (Exception e)
                 {
-                    if (verboose)
+                    if (verbose)
                     {
                         Console.WriteLine(e.ToString());
                     }
@@ -184,7 +201,7 @@ namespace A4ConnorAdams
                 catch (Exception e)
                 {
 
-                    if (verboose)
+                    if (verbose)
                     {
                         Console.WriteLine(e.ToString());
                     }
