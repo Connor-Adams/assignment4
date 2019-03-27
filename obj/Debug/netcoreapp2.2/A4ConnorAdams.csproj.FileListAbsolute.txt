@@ -1,0 +1,11 @@
+/home/connor/RiderProjects/A4ConnorAdams/bin/Debug/netcoreapp2.2/A4ConnorAdams.deps.json
+/home/connor/RiderProjects/A4ConnorAdams/bin/Debug/netcoreapp2.2/A4ConnorAdams.runtimeconfig.json
+/home/connor/RiderProjects/A4ConnorAdams/bin/Debug/netcoreapp2.2/A4ConnorAdams.runtimeconfig.dev.json
+/home/connor/RiderProjects/A4ConnorAdams/bin/Debug/netcoreapp2.2/A4ConnorAdams.dll
+/home/connor/RiderProjects/A4ConnorAdams/bin/Debug/netcoreapp2.2/A4ConnorAdams.pdb
+/home/connor/RiderProjects/A4ConnorAdams/obj/Debug/netcoreapp2.2/A4ConnorAdams.csprojAssemblyReference.cache
+/home/connor/RiderProjects/A4ConnorAdams/obj/Debug/netcoreapp2.2/A4ConnorAdams.csproj.CoreCompileInputs.cache
+/home/connor/RiderProjects/A4ConnorAdams/obj/Debug/netcoreapp2.2/A4ConnorAdams.AssemblyInfoInputs.cache
+/home/connor/RiderProjects/A4ConnorAdams/obj/Debug/netcoreapp2.2/A4ConnorAdams.AssemblyInfo.cs
+/home/connor/RiderProjects/A4ConnorAdams/obj/Debug/netcoreapp2.2/A4ConnorAdams.dll
+/home/connor/RiderProjects/A4ConnorAdams/obj/Debug/netcoreapp2.2/A4ConnorAdams.pdb
