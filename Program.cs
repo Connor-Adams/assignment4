@@ -178,102 +178,127 @@ namespace A4ConnorAdams
                 {
                     Console.WriteLine("Enter the name of the guest sitting at table: "+ (i+1)+" in seat: "+ (j+1));
                     _guestList[i, j] = Console.ReadLine();
+                    _isThisSeatTaken[i, j] = true;
                 }
             }
         }
 
+        static bool SeatsAvailable()
+        {
+            bool hasSeat = true;
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+
+                    if (hasSeat && _isThisSeatTaken[i, j])
+                    {
+                        hasSeat = false;
+                    }
+                }
+            }
+
+            return hasSeat;
+        }
+        
        
         
         static void AddGuest()
         {
             int table, seat;
             string name;
-            
-            do
+            if (SeatsAvailable())
             {
-                Name:
-                try
+                do
                 {
-                    Console.WriteLine("Enter The guests name: (Maximum of 20 characters)");
-                    name = Console.ReadLine();
-
-                    if (name.Length > 20)
+                    Name:
+                    try
                     {
-                        throw new Exception("Guest Name Exceeeded 20 characters in length");
+                        Console.WriteLine("Enter The guests name: (Maximum of 20 characters)");
+                        name = Console.ReadLine();
+
+                        if (name.Length > 20)
+                        {
+                            throw new Exception("Guest Name Exceeeded 20 characters in length");
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        if (verbose)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
+
+                        Console.WriteLine("Please enter a name under 20 characters in length");
+                        goto Name;
                     }
 
-                }
-                catch (Exception e)
-                {
-                    if (verbose)
+
+
+                    Table:
+                    try
                     {
-                        Console.WriteLine(e.ToString());
+                        Console.WriteLine("Enter the table number (1-6)");
+                        table = int.Parse(Console.ReadLine());
+                        if (table > 6 || table <= 0)
+                        {
+                            throw new ArgumentOutOfRangeException("Table Array",
+                                "Table out of bounds; Value from 1-6 expected");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        if (verbose)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
+
+                        Console.WriteLine("Response out of bounds");
+                        goto Table;
                     }
 
-                    Console.WriteLine("Please enter a name under 20 characters in length");
-                    goto Name;
-                }
 
-
-
-                Table:
-                try
-                {
-                    Console.WriteLine("Enter the table number (1-6)");
-                    table = int.Parse(Console.ReadLine());
-                    if (table > 6 || table <= 0)
+                    Seat:
+                    try
                     {
-                        throw new ArgumentOutOfRangeException("Table Array",
-                            "Table out of bounds; Value from 1-6 expected");
+                        Console.WriteLine("Enter the seat number (1-4)");
+                        seat = int.Parse(Console.ReadLine());
+
+                        if (seat > 4 || seat <= 0)
+                        {
+                            throw new ArgumentOutOfRangeException("Seat Array",
+                                "Seat out of bounds; Value from 1-6 expected");
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    if (verbose)
+                    catch (Exception e)
                     {
-                        Console.WriteLine(e.ToString());
-                    }
 
-                    Console.WriteLine("Response out of bounds");
-                    goto Table;
-                }
+                        if (verbose)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
 
-
-                Seat:
-                try
-                {
-                    Console.WriteLine("Enter the seat number (1-4)");
-                    seat = int.Parse(Console.ReadLine());
-
-                    if (seat > 4 || seat <= 0)
-                    {
-                        throw new ArgumentOutOfRangeException("Seat Array",
-                            "Seat out of bounds; Value from 1-6 expected");
-                    }
-                }
-                catch (Exception e)
-                {
-
-                    if (verbose)
-                    {
-                        Console.WriteLine(e.ToString());
+                        Console.WriteLine("Response out of bounds");
+                        goto Seat;
                     }
 
-                    Console.WriteLine("Response out of bounds");
-                    goto Seat;
-                }
+                    _guestList[table - 1, seat - 1] = name;
+                    _isThisSeatTaken[table - 1, seat - 1] = true;
 
-                _guestList[table-1, seat-1] = name;
-                _isThisSeatTaken[table - 1, seat - 1] = true;
+                    break;
 
-                break;
-
-            } while (true);
+                } while (true);
+            }
+            else
+            {
+                Console.WriteLine("No seats are avalible");
+            }
 
 
 
         }
-
+        
         static void Menu()
         {
             int option;
@@ -331,6 +356,7 @@ namespace A4ConnorAdams
         
         static void Main(string[] args)
         {
+            PopulateList();
             Menu();
         }
     }
