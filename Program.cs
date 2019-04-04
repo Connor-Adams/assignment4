@@ -1,22 +1,21 @@
 ﻿using System;
 using System.IO;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Transactions;
-using System.Xml;
+using System.Threading;
 
 namespace A4ConnorAdams
 {
     class Program
     {
         private static string[,] _guestList = new string[6,4];
+        private static bool[,] _isThisSeatTaken = new bool[6, 4];
 
+        //for debugging only - extended logging
         private static bool verbose = true;
 
-     static void SearchBySeat()
+        static void SearchBySeat()
      {
          int table, seat;
+         SearchTable:
             try
             {
                 Console.WriteLine("Enter Table number");
@@ -35,14 +34,35 @@ namespace A4ConnorAdams
                 }
 
                 Console.WriteLine("Response out of bounds");
-                //goto
+                goto SearchTable;
             }
             
         }
 
         static void SearchByName()
         {
-            Console.WriteLine("Search by name");
+            string name;
+            bool foundGuest = false;
+            Console.WriteLine("what is your guests name?");
+           name = Console.ReadLine();
+           
+           for (int i = 0; i < 6; i++)
+           {
+               for (int j = 0; j < 4; j++)
+               {
+                   if (name == _guestList[i, j])
+                   {
+                       Console.WriteLine(name+" is sitting at table: "+(i+1)+" in seat: "+(j+1));
+                       foundGuest = true;
+                   }
+               }
+           }
+
+           if (!foundGuest)
+           {
+               Console.WriteLine("Could not find a guest by the name of '"+name+"'");
+           }
+           
         }
         
         static void Lookup()
@@ -52,8 +72,8 @@ namespace A4ConnorAdams
             try
             {
                 Console.WriteLine("Select a search method");
-                Console.WriteLine("1). Search by Name");
-                Console.WriteLine("2). Search by Seat");
+                Console.WriteLine("1). Search by Seat");
+                Console.WriteLine("2). Search by Name");
                 
                 
                 searchType = int.Parse(Console.ReadLine());
@@ -97,26 +117,58 @@ namespace A4ConnorAdams
                     if (_guestList[m, n] == null)
                     {
                         _guestList[m, n] = "Vacant";
+                        _isThisSeatTaken[m, n] = false;
                     }
-                    //Console.WriteLine(_guestList[m, n]);
                 }
             }
             
         }
-        
+
         static void RemoveGuest()
         {
-            int table, seat;
-            
-            Console.WriteLine("What table is your guest sitting at?");
-            table = int.Parse(Console.ReadLine());
-            
-            Console.WriteLine("What seat is your guest in?");
-            seat = int.Parse(Console.ReadLine());
+            Start:
+            do
+            {    //rests variable each time the loop is run
+                int table = 0, seat = 0;
+                
+            try
+            {
+                Console.WriteLine("What table is your guest sitting at?");
+                table = int.Parse(Console.ReadLine());
 
-            _guestList[table - 1, seat - 1] = null;
 
-        }
+                Console.WriteLine("What seat is your guest in?");
+                seat = int.Parse(Console.ReadLine());
+
+                if (table == 0 || seat == 0 || table > 6 || seat > 4)
+                {
+                    throw new IndexOutOfRangeException("Table or seat invalid");
+                }
+            }
+            catch (Exception e)
+            {
+                if (verbose) Console.WriteLine(e.ToString());
+                goto Start;
+            }
+          
+                if (_isThisSeatTaken[table - 1, seat - 1])
+                {
+                    _guestList[table - 1, seat - 1] = null;
+                }
+                else
+                {
+                    Console.Write("Error! | ");
+                    Console.WriteLine("This seat is currently unassigned");
+                }
+
+                Console.WriteLine("Seat emptied");
+                break;
+
+            }while(true);
+
+
+
+    }
         
         static void PopulateList()
         {
@@ -131,6 +183,7 @@ namespace A4ConnorAdams
         }
 
        
+        
         static void AddGuest()
         {
             int table, seat;
@@ -211,6 +264,7 @@ namespace A4ConnorAdams
                 }
 
                 _guestList[table-1, seat-1] = name;
+                _isThisSeatTaken[table - 1, seat - 1] = true;
 
                 break;
 
@@ -225,7 +279,7 @@ namespace A4ConnorAdams
             int option;
             MainMenu:
             Console.WriteLine("---------------------------------");
-            Console.WriteLine("Wedding Seating Char - Main Menut");
+            Console.WriteLine("Wedding Seating Chart - Main Menu");
             Console.WriteLine("---------------------------------");
             Console.WriteLine("1). View Seating Chart");
             Console.WriteLine("2). Add a guest");
